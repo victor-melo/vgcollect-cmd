@@ -5,7 +5,6 @@ class Config:
   password = ""
 
   def __init__(self):
-      print("Loading Config")
       config = configparser.ConfigParser()
       config.read('vgcollect.cfg')
       self.username = config['AUTH']['Username']

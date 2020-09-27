@@ -3,7 +3,7 @@
 # Introduction
 vgcollect-cmd is a command like tool for interacting with your vgcollect.com collection
 
-Currently, only searching your collection is currently supported
+Currently, only searching and backing up your collection is currently supported
 
 # Install
 Before you begin, you need to create a vgcollect.cfg file with the following contents 
@@ -16,5 +16,9 @@ Password=<enter your vgcollect password>
 
 Example Command
 ```
+# Display all games in your collection with "final fantasy" in its title
 python3 main.py search "final fantasy"
+
+# Backup your collection to a csv file
+python3 main.py backup
 ```

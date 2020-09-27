@@ -1,1 +1,3 @@
 vgcollect.cfg
+*.csv
+*.pyc

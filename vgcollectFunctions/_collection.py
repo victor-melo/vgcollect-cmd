@@ -3,7 +3,6 @@ from ._config import Config
 class collection(object):
 
      def __init__(self):
-          print("Loading Collection")
           self.loadCollection()
 
      def loadCollection(self):
@@ -22,8 +21,6 @@ class collection(object):
           self.collection = session.get(export_url)
           
           session.close()
-     def clear(self):
-          print("test123")
 
      # The purpose of this function is to replace special characters and
      # convert all searching to lower case for easier searching
@@ -48,9 +45,13 @@ class collection(object):
                          str(line).split("\",\"")[8],]
                          )
 
+          # Format the output into a table
           lens = []
           for col in zip(*result):
                lens.append(max([len(v) for v in col]))
           format = "  ".join(["{:<" + str(l) + "}" for l in lens])
           for row in result:
                print(format.format(*row))
+
+     def backup(self):
+          print(str(self.collection.content).replace('\\n', '\n'))
