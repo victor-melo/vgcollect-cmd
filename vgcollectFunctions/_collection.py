@@ -25,13 +25,17 @@ class collection(object):
      # The purpose of this function is to replace special characters and
      # convert all searching to lower case for easier searching
      def fixStringInput(self, string):
-          test = string.replace('\\xc3\\xa9', 'e') # For Pokemon é
-          return test.lower()
+          string = string.replace(
+               '\\xc3\\xa9', 'é').replace( # For Pokemon é
+               '\\\'', '') # Replaces \' with nothing for easier searching
+          return string.lower()
 
      # This will fix any string that is outputted
      def fixStringOutput(self, string):
-          test = string.replace('\\xc3\\xa9', 'é') # For Pokemon é
-          return test
+          string = string.replace(
+               '\\xc3\\xa9', 'é').replace( # For Pokemon é
+               '\\\'', '\'') # Replaces \' with '
+          return string
 
      def search(self, query):
           
