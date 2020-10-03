@@ -26,7 +26,7 @@ class collection(object):
      # convert all searching to lower case for easier searching
      def fixStringInput(self, string):
           string = string.replace(
-               '\\xc3\\xa9', 'é').replace( # For Pokemon é
+               '\\xc3\\xa9', 'e').replace( # For Pokemon é
                '\\\'', '') # Replaces \' with nothing for easier searching
           return string.lower()
 
