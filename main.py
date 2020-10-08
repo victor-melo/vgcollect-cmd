@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import vgcollectFunctions._collection
 import sys
 
