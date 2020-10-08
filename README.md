@@ -17,8 +17,8 @@ Password=<enter your vgcollect password>
 Example Command
 ```
 # Display all games in your collection with "final fantasy" in its title
-python3 main.py search "final fantasy"
+./vgc.py search "final fantasy"
 
 # Backup your collection to a csv file
-python3 main.py backup
+./vgc.py backup
 ```
