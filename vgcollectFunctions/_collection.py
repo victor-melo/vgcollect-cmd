@@ -44,6 +44,7 @@ class collection(object):
           string = (string.replace('\\xc3\\xa9', 'e') # For Pokemon é
                           .replace('\\\'', '')  # Replaces \' with nothing for easier searching
                           .replace('&amp;', '&') # Fixing &
+                          .replace(':', '') # Remove colins for search
           )
           return string.lower()
 
