@@ -1,4 +1,5 @@
 import requests
+import colorama
 from ._config import Config
 class collection(object):
 
@@ -61,7 +62,7 @@ class collection(object):
 
      def search(self, query, use_local):
           
-          result = [["Console", "Title", "Cart", "Box", "Manual", "Notes", "Cost"], ["=====","=====", "=====", "=====", "=====", "=====", "====="]]
+          result = [["Console", "Title", "Cart", "Box", "Manual", "Notes", "Cost"], ["---","---", "---", "---", "---", "---", "---"]]
 
           if (use_local == False):
                for line in self.collection.iter_lines():
@@ -79,8 +80,6 @@ class collection(object):
           else:
                # If the person added the use_local flag, search the local cache
                for line in self.collection_local.splitlines():
-                    # print (line)
-                    # return
                     if (self.fixStringInput(str(line)).find(self.fixStringInput(self.fixStringInput(query))) != -1):
                          result.append(
                               [
@@ -92,14 +91,32 @@ class collection(object):
                                    str(line).split("\",\"")[3], # Notes
                                    str(line).split("\",\"")[8], # Price
                               ])
+                         
+
+
 
           # Format the output into a table
+          from colorama import init, Fore, Back, Style
+          init(autoreset=True)
+          
+          color_cycle = False
+          header_printed = False
+
           lens = []
           for col in zip(*result):
                lens.append(max([len(v) for v in col]))
           format = "  ".join(["{:<" + str(l) + "}" for l in lens])
           for row in result:
-               print(format.format(*row))
+               if (not header_printed):
+                    print(Fore.BLACK + Back.LIGHTCYAN_EX + format.format(*row))
+                    header_printed = True
+               elif (color_cycle):
+                    print(Fore.WHITE + Back.LIGHTBLACK_EX+ format.format(*row))
+               else:
+                    print(Fore.BLACK + Back.CYAN  + format.format(*row))
+               color_cycle = not color_cycle
+
+
 
      def backup(self):
           print(str(self.collection.content).replace('\\n', '\n'))
