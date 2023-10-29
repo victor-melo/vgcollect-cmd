@@ -45,6 +45,7 @@ class collection(object):
                           .replace('\\\'', '')  # Replaces \' with nothing for easier searching
                           .replace('&amp;', '&') # Fixing &
                           .replace(':', '') # Remove colins for search
+                          .replace('-', '') # Remove dash for search
           )
           return string.lower()
 
