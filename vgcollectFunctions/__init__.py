@@ -1,5 +1,5 @@
 class vgcollectFunctions(object):
-     def __init__(self):
+     def __init__(self, use_local):
        print("vgcollectFunctions module load")
 
      #Imported methods
