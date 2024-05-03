@@ -9,7 +9,6 @@ class collection(object):
           self.loadCollection(use_local)
 
      def loadCollection(self, use_local):
-          print("use local is", use_local)
           auth = Config()
 
           login_url = "https://vgcollect.com/login/authenticate"
@@ -150,8 +149,7 @@ class collection(object):
 
           # Add the header to result1
           result1.insert(0, ["  Title", "Cart", "Box", "Manual", "Cost"])
-          #result1.insert(1, ["----", "----", "----", "----", "----"])
-          print (result1)
+          
           return result1, result2
 
      def search(self, query, use_local):
@@ -182,7 +180,7 @@ class collection(object):
 
           # The intention here is to figure out how wide each column is. Since we moved the notes & price column
           # to the next line, we need to figure out whether the title or notes field is the longest column
-          if (len(lens2) != 0):
+          if (len(lens2) != 0 and self.show_notes == True):
                for l in lens:
                     if (l < lens2[index]):
                          lens[index] = lens2[index]
