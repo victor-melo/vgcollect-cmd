@@ -77,6 +77,10 @@ class collection(object):
           string = (string.replace('PlayStation 4 ', 'PS4 ')) # Shortens the console PS4
           string = (string.replace('PlayStation 5 ', 'PS5 ')) # Shortens the console PS5
           string = (string.replace('PlayStation 6 ', 'PS6 ')) # Shortens the console PS6
+          string = (string.replace('PlayStation Network ', "PSN ")) # Shortens the console PSN
+          string = (string.replace('Sega Genesis/Mega Drive Accessory', "Sega Genesis Accessory "))
+          string = (string.replace('Skylanders Figures/Traps/Vehicles', "Skylanders "))
+          string = (string.replace('Super Nintendo/Super Famicom Accessory', "SNES Accessory"))
           return string
 
      def search(self, query, use_local):
