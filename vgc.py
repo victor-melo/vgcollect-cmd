@@ -38,7 +38,7 @@ for num in range(total):
     backup = True
     break
 
-  elif cmdargs[num] == 'help' or cmdargs[num] == 'h' or cmdargs[num] == '-h':
+  elif cmdargs[num] == 'help' or cmdargs[num] == 'h' or cmdargs[num] == '-h' or cmdargs[num] == '--help':
     print ("Usage:")
     print ("")
     print ("  search \"<query>\" - Search your collection with a query")
