@@ -149,12 +149,8 @@ class collection(object):
           # to the next line, we need to figure out whether the title or notes field is the longest column
           if (len(lens2) != 0):
                for l in lens:
-                    # if (index < 2): # this is the header row.
-                    #      index = index + 1
-                    #      continue
                     if (l < lens2[index]):
                          lens[index] = lens2[index]
-                         print ("test" + str(index))
                     index = index + 1
           
 
@@ -165,24 +161,18 @@ class collection(object):
                #print (row)
                if (not header_printed1):
                     print(Fore.BLACK + Back.LIGHTCYAN_EX + format.format(*row))
-                    #print (result2[index])
-                    #print(Fore.BLACK + Back.LIGHTCYAN_EX + format.format(*result2[index]))
                     header_printed1 = True
                elif (not header_printed2):
                     print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
                     header_printed2 = True
                elif (color_cycle):
                     print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
-                    
                     print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*result2[index]))
                else:
                     print(Fore.BLACK + Back.CYAN  + format.format(*row))
-                    
                     print(Fore.BLACK + Back.CYAN  + format.format(*result2[index]))
                color_cycle = not color_cycle
                index = index+1
-
-
 
      def backup(self):
           print(str(self.collection.content).replace('\\n', '\n'))
