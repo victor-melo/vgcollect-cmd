@@ -2,8 +2,10 @@ import requests
 import colorama
 from ._config import Config
 class collection(object):
+     show_notes = False
 
-     def __init__(self, use_local):
+     def __init__(self, use_local, show_notes):
+          self.show_notes = show_notes
           self.loadCollection(use_local)
 
      def loadCollection(self, use_local):
@@ -83,53 +85,82 @@ class collection(object):
           string = (string.replace('Super Nintendo/Super Famicom Accessory', "SNES Accessory"))
           return string
 
+     def getResults(self, collection, query):
+
+          # First, lets aphapatize the list, first by console, then by title
+          
+          collection_alphabetized = []
+
+          for line in collection:
+               if (self.fixStringInput(str(line)).find(self.fixStringInput(self.fixStringInput(query))) != -1):
+                    collection_alphabetized.append(
+                         [
+                              self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
+                              self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
+                              self.checkBox(str(line).split("\",\"")[4]), # Cart
+                              self.checkBox(str(line).split("\",\"")[5]), # Box
+                              self.checkBox(str(line).split("\",\"")[6]), # Manual
+                              str(line).split("\",\"")[8], # Price
+                              str(line).split("\",\"")[3], # Notes
+                         ])
+          
+          collection_alphabetized.sort()
+
+          result1 = []
+          result2 = []
+
+          index = 0
+          previous_console = ""
+          console = ""
+          for line in collection_alphabetized:
+               if (index == 0):
+                    console = line[0]
+               if (line[0] != previous_console):
+                    result1.append([
+                         line[0],
+                         "",
+                         "",
+                         "",
+                         "",
+                    ])
+               else:
+                    console = ""
+               index = index + 1
+
+               previous_console = line[0]
+
+               result1.append(
+                    [
+                         "  " + line[1], # Title\
+                         line[2], # Cart
+                         line[3], # Box
+                         line[4], # Manual
+                         line[5], # Price
+                    ])
+
+
+               result2.append(
+                    [
+                         "    " + line[6], # Notes
+                         "",
+                         "",
+                         "",
+                         "",
+                    ])
+
+          # Add the header to result1
+          result1.insert(0, ["  Title", "Cart", "Box", "Manual", "Cost"])
+          #result1.insert(1, ["----", "----", "----", "----", "----"])
+          print (result1)
+          return result1, result2
+
      def search(self, query, use_local):
           
-          result1 = [["Platform", "Title", "Cart", "Box", "Manual"], ["----","----", "----", "----", "----"]]
-          result2 = []
-          if (use_local == False):
-               for line in self.collection.iter_lines():
-                    if (self.fixStringInput(str(line)).find(self.fixStringInput(self.fixStringInput(query))) != -1):
-                         result1.append(
-                              [
-                                   self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
-                                   self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
-                                   self.checkBox(str(line).split("\",\"")[4]), # Cart
-                                   self.checkBox(str(line).split("\",\"")[5]), # Box
-                                   self.checkBox(str(line).split("\",\"")[6]), # Manual
-                              ])
 
-                         result2.append(
-                              [
-                                   str(line).split("\",\"")[3], # Notes
-                                   str(line).split("\",\"")[8], # Price
-                                   "",
-                                   "",
-                                   ""
-                              ])
+          if (use_local):
+               result1, result2 = self.getResults(self.collection_local.splitlines(), query)
           else:
-               # If the person added the use_local flag, search the local cache
-               for line in self.collection_local.splitlines():
-                    if (self.fixStringInput(str(line)).find(self.fixStringInput(self.fixStringInput(query))) != -1):
-                         result1.append(
-                              [
-                                   self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
-                                   self.fixStringOutput(str(line).split("\",\"")[1]), # Title
-                                   self.checkBox(str(line).split("\",\"")[4]), # Cart
-                                   self.checkBox(str(line).split("\",\"")[5]), # Box
-                                   self.checkBox(str(line).split("\",\"")[6]), # Manual
-                              ])
-                         result2.append(
-                              [
-                                   "Cost: " + str(line).split("\",\"")[8], # Price
-                                   str(line).split("\",\"")[3], # Notes
-                                   "",
-                                   "",
-                                   ""
-                              ])
-                         
-
-
+               result1, result2 = self.getResults(self.collection.iter_lines(), query)
 
           # Format the output into a table
           from colorama import init, Fore, Back, Style
@@ -137,7 +168,7 @@ class collection(object):
           
           color_cycle = False
           header_printed1 = False
-          header_printed2 = False
+          #header_printed2 = False
 
           lens = []
           lens2 = []
@@ -159,22 +190,28 @@ class collection(object):
           
 
           format = "  ".join(["{:<" + str(l) + "}" for l in lens])
-          index = -2
+          index = -1
 
           for row in result1:
-               #print (row)
+               
+
                if (not header_printed1):
-                    print(Fore.BLACK + Back.LIGHTCYAN_EX + format.format(*row))
+                    print(Fore.WHITE + Back.BLUE + format.format(*row))
                     header_printed1 = True
-               elif (not header_printed2):
-                    print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
-                    header_printed2 = True
+               # elif (not header_printed2):
+               #      print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
+               #      header_printed2 = True
+               elif (row[2] == ""): # must be a platform header
+                    print(Fore.BLACK + Back.LIGHTBLUE_EX + format.format(*row))
+                    continue
                elif (color_cycle):
                     print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
-                    print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*result2[index]))
+                    if (self.show_notes):
+                         print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*result2[index]))
                else:
-                    print(Fore.BLACK + Back.CYAN  + format.format(*row))
-                    print(Fore.BLACK + Back.CYAN  + format.format(*result2[index]))
+                    print(Fore.BLACK + Back.LIGHTWHITE_EX  + format.format(*row))
+                    if (self.show_notes):
+                         print(Fore.BLACK + Back.LIGHTWHITE_EX  + format.format(*result2[index]))
                color_cycle = not color_cycle
                index = index+1
 
