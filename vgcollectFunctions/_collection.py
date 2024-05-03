@@ -147,17 +147,15 @@ class collection(object):
 
           # The intention here is to figure out how wide each column is. Since we moved the notes & price column
           # to the next line, we need to figure out whether the title or notes field is the longest column
-          print (lens)
-          print (lens2)
-          for l in lens:
-               # if (index < 2): # this is the header row.
-               #      index = index + 1
-               #      continue
-               if (l < lens2[index]):
-                    lens[index] = lens2[index]
-                    print ("test" + str(index))
-               index = index + 1
-          print (lens)
+          if (len(lens2) != 0):
+               for l in lens:
+                    # if (index < 2): # this is the header row.
+                    #      index = index + 1
+                    #      continue
+                    if (l < lens2[index]):
+                         lens[index] = lens2[index]
+                         print ("test" + str(index))
+                    index = index + 1
           
 
           format = "  ".join(["{:<" + str(l) + "}" for l in lens])
