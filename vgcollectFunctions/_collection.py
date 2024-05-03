@@ -199,7 +199,12 @@ class collection(object):
                # elif (not header_printed2):
                #      print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
                #      header_printed2 = True
+               # elif (row[1] == ""): # must be a blank header
+               #      #print(Style.RESET_ALL)
+               #      print (row[1])
+               #      continue
                elif (row[2] == ""): # must be a platform header
+                    print(Style.RESET_ALL)
                     print(Fore.BLACK + Back.LIGHTBLUE_EX + format.format(*row))
                     continue
                elif (color_cycle):
