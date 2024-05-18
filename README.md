@@ -6,12 +6,18 @@ vgcollect-cmd is a command like tool for interacting with your vgcollect.com col
 Currently, only searching and backing up your collection is currently supported
 
 # Install
-Before you begin, you need to create a vgcollect.cfg file with the following contents 
+Before you begin, you need to create a vgcollect.cfg file with the following contents in /etc/
 
-```
+```text
 [AUTH]
 Username=<enter your vgcollect username>
 Password=<enter your vgcollect password>
+```
+
+Next, create the following directory /var/db/vgcollect and make sure you can read/write to it.
+
+```bash
+mkdir /var/db/vgcollect/
 ```
 
 Example Command

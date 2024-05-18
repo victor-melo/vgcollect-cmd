@@ -31,7 +31,7 @@ class collection(object):
 
           # Dump the data into a cache, this can be used laster with the "use_local" flag to speed up searching
           # At the expense at using old data
-          file = open("cache.csv", "w")
+          file = open("/var/db/vgcollect/cache.csv", "w")
           for line in self.collection.iter_lines():
                file.write(str(line) + "\n")
                #file.write(str(line))
