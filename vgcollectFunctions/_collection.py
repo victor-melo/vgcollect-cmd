@@ -20,7 +20,7 @@ class collection(object):
 
           # If we are using the local cache, we want to skip trying to pull in the latest data
           if (use_local):
-               file = open("cache.csv", "r")
+               file = open("/var/db/vgcollect/cache.csv", "r")
                self.collection_local = file.read()
                return
 
