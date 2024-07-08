@@ -14,6 +14,7 @@ search = False
 backup = False
 use_local = False
 show_notes = False
+show_missing_case = False
 
 for num in range(total):
   if num == 0:
@@ -29,6 +30,9 @@ for num in range(total):
 
   if cmdargs[num] == 'show_notes':
     show_notes=True
+
+  if cmdargs[num] == 'cases':
+    show_missing_case=True
 
   if cmdargs[num] == 'search':
     search = True
@@ -53,7 +57,8 @@ for num in range(total):
 f = vgcollectFunctions._collection.collection(use_local, show_notes)
 
 if (arg_search != ""):
-  f.search(arg_search, use_local)
+  f.search(arg_search, use_local, show_missing_case)
+  
 elif (backup == True):
   f.backup()
 

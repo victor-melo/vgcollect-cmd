@@ -6,7 +6,7 @@ vgcollect-cmd is a command like tool for interacting with your vgcollect.com col
 Currently, only searching and backing up your collection is currently supported
 
 # Install
-Before you begin, you need to create a vgcollect.cfg file with the following contents in /etc/
+Before you begin, you need to create a vgcollect.cfg file with the following contents in /.config/vgcollect/
 
 ```text
 [AUTH]
@@ -24,6 +24,15 @@ Example Command
 ```
 # Display all games in your collection with "final fantasy" in its title
 ./vgc.py search "final fantasy"
+
+# Using the use_local flag will cause the application to use its local cache to search instead
+# of reaching out to vgcollect.com. Use this to increase search speed if you havent updated your
+# vgcollect database since your last search
+./vgc.py use_local search "mario"
+
+# Using the cases flag, you will search for games with missing cases, note that your query searches
+# for platforms, not for the title
+./vgc.py cases saerch "PS3"
 
 # Backup your collection to a csv file
 ./vgc.py backup

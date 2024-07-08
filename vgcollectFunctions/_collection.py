@@ -84,24 +84,41 @@ class collection(object):
           string = (string.replace('Super Nintendo/Super Famicom Accessory', "SNES Accessory"))
           return string
 
-     def getResults(self, collection, query):
+     def getResults(self, collection, query, show_missing_case):
 
           # First, lets aphapatize the list, first by console, then by title
           
           collection_alphabetized = []
-
-          for line in collection:
-               if (self.fixStringInput(str(line)).find(self.fixStringInput(self.fixStringInput(query))) != -1):
-                    collection_alphabetized.append(
-                         [
-                              self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
-                              self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
-                              self.checkBox(str(line).split("\",\"")[4]), # Cart
-                              self.checkBox(str(line).split("\",\"")[5]), # Box
-                              self.checkBox(str(line).split("\",\"")[6]), # Manual
-                              str(line).split("\",\"")[8], # Price
-                              str(line).split("\",\"")[3], # Notes
-                         ])
+          if (show_missing_case):
+               
+               for line in collection:
+  
+                    if (self.fixStringOutputConsole(str(line).split("\",\"")[2]).find(query) != -1 and str(line).split("\",\"")[5] == "No"):
+                         
+                         collection_alphabetized.append(
+                              [
+                                   self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
+                                   self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
+                                   self.checkBox(str(line).split("\",\"")[4]), # Cart
+                                   self.checkBox(str(line).split("\",\"")[5]), # Box
+                                   self.checkBox(str(line).split("\",\"")[6]), # Manual
+                                   str(line).split("\",\"")[8], # Price
+                                   str(line).split("\",\"")[3], # Notes
+                              ])
+          
+          elif (show_missing_case == False):
+               for line in collection:
+                    if (self.fixStringInput(str(line)).find(self.fixStringInput(self.fixStringInput(query))) != -1):
+                         collection_alphabetized.append(
+                              [
+                                   self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
+                                   self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
+                                   self.checkBox(str(line).split("\",\"")[4]), # Cart
+                                   self.checkBox(str(line).split("\",\"")[5]), # Box
+                                   self.checkBox(str(line).split("\",\"")[6]), # Manual
+                                   str(line).split("\",\"")[8], # Price
+                                   str(line).split("\",\"")[3], # Notes
+                              ])
           
           collection_alphabetized.sort()
 
@@ -152,13 +169,14 @@ class collection(object):
           
           return result1, result2
 
-     def search(self, query, use_local):
-          
-
+     def search(self, query, use_local, show_missing_case=False):
           if (use_local):
-               result1, result2 = self.getResults(self.collection_local.splitlines(), query)
+               result1, result2 = self.getResults(self.collection_local.splitlines(), query, show_missing_case)
           else:
-               result1, result2 = self.getResults(self.collection.iter_lines(), query)
+               result1, result2 = self.getResults(self.collection.iter_lines(), query, show_missing_case)
+
+
+
 
           # Format the output into a table
           from colorama import init, Fore, Back, Style
