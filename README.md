@@ -32,7 +32,7 @@ Example Command
 
 # Using the cases flag, you will search for games with missing cases, note that your query searches
 # for platforms, not for the title
-./vgc.py cases saerch "PS3"
+./vgc.py cases search "PS3"
 
 # Backup your collection to a csv file
 ./vgc.py backup
