@@ -61,10 +61,12 @@ class collection(object):
           return string
 
      def checkBox(self, string):
+          from colorama import Fore
           if (string == "Yes"):
-               return "✓"
+               return Fore.GREEN + "✓" 
           else:
-               return "✘"
+               return Fore.RED + "✘"
+
 
      def fixStringOutputConsole(self,string):
           string = (string.replace('Nintendo Entertainment System ', 'NES ')) # Shortens the console NES
@@ -165,7 +167,8 @@ class collection(object):
                     ])
 
           # Add the header to result1
-          result1.insert(0, ["  Title", "Cart", "Box", "Manual", "Cost"])
+          from colorama import Fore
+          result1.insert(0, ["  Title", Fore.WHITE + "Cart" , Fore.WHITE + "Box" , Fore.WHITE + "Manual" , Fore.WHITE + "Cost    "])
           
           return result1, result2
 
@@ -175,16 +178,12 @@ class collection(object):
           else:
                result1, result2 = self.getResults(self.collection.iter_lines(), query, show_missing_case)
 
-
-
-
           # Format the output into a table
           from colorama import init, Fore, Back, Style
           init(autoreset=True)
           
           color_cycle = False
           header_printed1 = False
-          #header_printed2 = False
 
           lens = []
           lens2 = []
@@ -204,34 +203,43 @@ class collection(object):
                          lens[index] = lens2[index]
                     index = index + 1
           
-
           format = "  ".join(["{:<" + str(l) + "}" for l in lens])
           index = -1
 
           for row in result1:
                
-
                if (not header_printed1):
                     print(Fore.WHITE + Back.BLUE + format.format(*row))
                     header_printed1 = True
-               # elif (not header_printed2):
-               #      print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
-               #      header_printed2 = True
-               # elif (row[1] == ""): # must be a blank header
-               #      #print(Style.RESET_ALL)
-               #      print (row[1])
-               #      continue
                elif (row[2] == ""): # must be a platform header
-                    print(Style.RESET_ALL)
+                    print()
+                    # We need to add junk ANSCI colors to the rest of the empty columns
+                    # If we dont do this, the background row will extend past
+                    for addjunk in range(1, 5):
+                         row[addjunk] = Fore.BLACK + ""
+                    
                     print(Fore.BLACK + Back.LIGHTBLUE_EX + format.format(*row))
                     continue
                elif (color_cycle):
+                    row[4] = Fore.WHITE + row[4]
                     print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*row))
                     if (self.show_notes):
+                         # We need to add junk ANSCI colors to the rest of the empty columns
+                         # If we dont do this, the background row will extend past
+                         for addjunk in range(1, 5):
+                              result2[index][addjunk] = Fore.WHITE + ""
+
                          print(Fore.WHITE + Back.LIGHTBLACK_EX + format.format(*result2[index]))
                else:
+                    row[4] = Fore.BLACK + row[4]
                     print(Fore.BLACK + Back.LIGHTWHITE_EX  + format.format(*row))
                     if (self.show_notes):
+
+                         # We need to add junk ANSCI colors to the rest of the empty columns
+                         # If we dont do this, the background row will extend past
+                         for addjunk in range(1, 5):
+                              result2[index][addjunk] = Fore.BLACK + ""
+
                          print(Fore.BLACK + Back.LIGHTWHITE_EX  + format.format(*result2[index]))
                color_cycle = not color_cycle
                index = index+1
