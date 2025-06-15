@@ -20,6 +20,13 @@ Next, create the following directory /var/db/vgcollect and make sure you can rea
 mkdir /var/db/vgcollect/
 ```
 
+You will also need to install the following python libraries using either pip or your package manager
+
+```
+requests
+colorama
+```
+
 Example Command
 ```
 # Display all games in your collection with "final fantasy" in its title
