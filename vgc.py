@@ -15,6 +15,7 @@ backup = False
 use_local = False
 show_notes = False
 show_missing_case = False
+debug = False
 
 for num in range(total):
   if num == 0:
@@ -23,7 +24,7 @@ for num in range(total):
   if search == True:
     search = False
     arg_search = cmdargs[num]
-    continue
+    #continue
 
   if cmdargs[num] == 'use_local':
     use_local=True
@@ -36,7 +37,10 @@ for num in range(total):
 
   if cmdargs[num] == 'search':
     search = True
-    continue
+    #continue
+
+  if cmdargs[num] == 'debug':
+    debug = True
 
   elif cmdargs[num] == 'backup':
     backup = True
@@ -48,7 +52,9 @@ for num in range(total):
     print ("  search \"<query>\" - Search your collection with a query")
     print ("  use_local        - This will only search the local cache instead of calling out to vgcollect")
     print ("  show_notes       - Show the notes field for each games shown")
+    print ("  refresh          - Refresh the local database manually")
     print ("  cases            - Show games with missing cases, your search query becomes console search")
+    print ("  debug            - Enable Debug Logging")
     print ("  help             - Show this page")
     print ("\n")
     print ("  Example of searching for mario games using only the local cache")
@@ -59,7 +65,7 @@ for num in range(total):
     print ("")
     quit()
 
-f = vgcollectFunctions._collection.collection(use_local, show_notes)
+f = vgcollectFunctions._collection.collection(use_local, show_notes, debug)
 
 if (arg_search != ""):
   f.search(arg_search, use_local, show_missing_case)

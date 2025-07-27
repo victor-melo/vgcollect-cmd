@@ -1,10 +1,16 @@
 import requests
 import colorama
+import os
+import time 
 from ._config import Config
 class collection(object):
      show_notes = False
+     database_path = "/var/db/vgcollect/cache.csv"
+     use_local = False
+     debug = False
 
-     def __init__(self, use_local, show_notes):
+     def __init__(self, use_local, show_notes, debug=False):
+          self.debug = debug
           self.show_notes = show_notes
           self.loadCollection(use_local)
 
@@ -19,11 +25,14 @@ class collection(object):
                     'password': auth.password}
 
           # If we are using the local cache, we want to skip trying to pull in the latest data
-          if (use_local):
-               file = open("/var/db/vgcollect/cache.csv", "r")
+          if (use_local or not self.getFileModificationTime()):
+               file = open(self.database_path, "r")
                self.collection_local = file.read()
+               self.use_local = True
+               self.debugLog("Using local cached file database")
                return
 
+          self.debugLog("Refreshing local database from vgcollect")
           session = requests.Session()
 
           post = session.post(login_url, data=values)
@@ -31,7 +40,7 @@ class collection(object):
 
           # Dump the data into a cache, this can be used laster with the "use_local" flag to speed up searching
           # At the expense at using old data
-          file = open("/var/db/vgcollect/cache.csv", "w")
+          file = open(self.database_path, "w")
           for line in self.collection.iter_lines():
                file.write(str(line) + "\n")
                #file.write(str(line))
@@ -59,6 +68,10 @@ class collection(object):
                           .replace('&amp;', '&') # Fixing &
           )
           return string
+     
+     def debugLog(self, message):
+          if (self.debug == True):
+               print("[Debug] " + message)
 
      def checkBox(self, string):
           from colorama import Fore
@@ -67,6 +80,17 @@ class collection(object):
           else:
                return Fore.RED + "✘"
 
+     # This fucntion will return true if the current database is 1 day out of date, false if it isn't
+     def getFileModificationTime(self):
+          modification_time = os.path.getmtime(self.database_path)   
+          epoch_time = int(time.time())
+          # print("hello:"+epoch_time)
+          # print(modification_time)
+          if (epoch_time - modification_time > 86400):
+               self.debugLog("Local cached file is out of date")
+               return True
+          else:
+               return False
 
      def fixStringOutputConsole(self,string):
           string = (string.replace('Nintendo Entertainment System ', 'NES ')) # Shortens the console NES
@@ -172,11 +196,12 @@ class collection(object):
           
           return result1, result2
 
-     def search(self, query, use_local, show_missing_case=False):
-          if (use_local):
+     def search(self, query, use_local, show_missing_case=False, refresh=False):
+          if (self.use_local):
                result1, result2 = self.getResults(self.collection_local.splitlines(), query, show_missing_case)
           else:
                result1, result2 = self.getResults(self.collection.iter_lines(), query, show_missing_case)
+
 
           # Format the output into a table
           from colorama import init, Fore, Back, Style
