@@ -1,5 +1,3 @@
-# WARNING, this is a work in progress
-
 # Introduction
 vgcollect-cmd is a command like tool for interacting with your vgcollect.com collection
 
@@ -27,20 +25,28 @@ requests
 colorama
 ```
 
-Example Command
-```
-# Display all games in your collection with "final fantasy" in its title
+Example Commands
+
+## Searching 
+Searching all games in your collection with "final fantasy" in its title
+```bash
 ./vgc.py search "final fantasy"
+```
 
-# Using the use_local flag will cause the application to use its local cache to search instead
-# of reaching out to vgcollect.com. Use this to increase search speed if you havent updated your
-# vgcollect database since your last search
-./vgc.py use_local search "mario"
+## Refresh 
+Using the refresh flag will force the application to refresh its local cache from vgcollect and search. You can use this to force a refresh of your local database if you just added a new game to your vgcollect database
+```bash
+./vgc.py refresh search "mario"
+```
 
-# Using the cases flag, you will search for games with missing cases, note that your query searches
-# for platforms, not for the title
+## Cases
+Using the cases flag, you will search for games with missing cases, note that your query searches for platforms, not for the title
+```bash
 ./vgc.py cases search "PS3"
+```
 
-# Backup your collection to a csv file
-./vgc.py backup
+## Backup
+Backup your collection to a stdout
+```bash
+./vgc.py backup > vgcollect_backup.csv
 ```

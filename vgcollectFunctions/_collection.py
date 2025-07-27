@@ -1,7 +1,8 @@
 import requests
 import colorama
 import os
-import time 
+import time
+import re
 from ._config import Config
 class collection(object):
      show_notes = False
@@ -11,6 +12,7 @@ class collection(object):
 
      def __init__(self, use_local, show_notes, debug=False):
           self.debug = debug
+          self.use_local = use_local
           self.show_notes = show_notes
           self.loadCollection(use_local)
 
@@ -25,9 +27,10 @@ class collection(object):
                     'password': auth.password}
 
           # If we are using the local cache, we want to skip trying to pull in the latest data
-          if (use_local or not self.getFileModificationTime()):
+          if (use_local == True and not self.getFileModificationTime()):
                file = open(self.database_path, "r")
                self.collection_local = file.read()
+               file.close()
                self.use_local = True
                self.debugLog("Using local cached file database")
                return
@@ -45,7 +48,12 @@ class collection(object):
                file.write(str(line) + "\n")
                #file.write(str(line))
           file.close()
-          
+
+          # Now re-read the collection file
+          file = open(self.database_path, "r")
+          self.collection_local = file.read()
+          file.close()
+
           session.close()
 
      # The purpose of this function is to replace special characters and
@@ -196,12 +204,9 @@ class collection(object):
           
           return result1, result2
 
-     def search(self, query, use_local, show_missing_case=False, refresh=False):
-          if (self.use_local):
-               result1, result2 = self.getResults(self.collection_local.splitlines(), query, show_missing_case)
-          else:
-               result1, result2 = self.getResults(self.collection.iter_lines(), query, show_missing_case)
+     def search(self, query, show_missing_case=False, refresh=False):
 
+          result1, result2 = self.getResults(self.collection_local.splitlines(), query, show_missing_case)
 
           # Format the output into a table
           from colorama import init, Fore, Back, Style
@@ -270,4 +275,6 @@ class collection(object):
                index = index+1
 
      def backup(self):
-          print(str(self.collection.content).replace('\\n', '\n'))
+          #print(str(self.collection_local).replace('\n', ''))
+          output = re.sub(',\'$', '', str(self.collection_local).replace(',\'\nb\'', '\n'))
+          print(output)

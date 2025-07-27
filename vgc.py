@@ -12,7 +12,7 @@ cmdargs = sys.argv
 arg_search = ""
 search = False
 backup = False
-use_local = False
+use_local = True
 show_notes = False
 show_missing_case = False
 debug = False
@@ -26,8 +26,8 @@ for num in range(total):
     arg_search = cmdargs[num]
     #continue
 
-  if cmdargs[num] == 'use_local':
-    use_local=True
+  if cmdargs[num] == 'refresh':
+    use_local=False
 
   if cmdargs[num] == 'show_notes':
     show_notes=True
@@ -50,7 +50,6 @@ for num in range(total):
     print ("Usage:")
     print ("")
     print ("  search \"<query>\" - Search your collection with a query")
-    print ("  use_local        - This will only search the local cache instead of calling out to vgcollect")
     print ("  show_notes       - Show the notes field for each games shown")
     print ("  refresh          - Refresh the local database manually")
     print ("  cases            - Show games with missing cases, your search query becomes console search")
@@ -68,7 +67,7 @@ for num in range(total):
 f = vgcollectFunctions._collection.collection(use_local, show_notes, debug)
 
 if (arg_search != ""):
-  f.search(arg_search, use_local, show_missing_case)
+  f.search(arg_search, show_missing_case)
   
 elif (backup == True):
   f.backup()
