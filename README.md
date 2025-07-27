@@ -33,6 +33,12 @@ Searching all games in your collection with "final fantasy" in its title
 ./vgc.py search "final fantasy"
 ```
 
+## Showing your vgcollect notes
+You can use the notes flag to output each note with every game
+```bash
+./vgc.py notes search "final fantasy"
+```
+
 ## Refresh 
 Using the refresh flag will force the application to refresh its local cache from vgcollect and search. You can use this to force a refresh of your local database if you just added a new game to your vgcollect database
 ```bash

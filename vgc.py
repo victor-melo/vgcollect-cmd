@@ -29,7 +29,7 @@ for num in range(total):
   if cmdargs[num] == 'refresh':
     use_local=False
 
-  if cmdargs[num] == 'show_notes':
+  if cmdargs[num] == 'notes':
     show_notes=True
 
   if cmdargs[num] == 'cases':
