@@ -119,26 +119,48 @@ class collection(object):
           return string
 
      def getResults(self, collection, query, show_missing_case):
+          self.debugLog("User query is: " + query)
 
           # First, lets aphapatize the list, first by console, then by title
-          
           collection_alphabetized = []
           if (show_missing_case):
+               fixed_query = self.fixStringInput(query)
+               
+               if (fixed_query.startswith("ps")):
+                    if (fixed_query == "ps" or fixed_query == "ps1"):
+                         fixed_query = "playstation"
+                    else:
+                         fixed_query = "playstation" + fixed_query[-1:]
+                         
+                    self.debugLog("User query changing to: " + fixed_query)
                
                for line in collection:
-  
-                    if (self.fixStringOutputConsole(str(line).split("\",\"")[2]).find(query) != -1 and str(line).split("\",\"")[5] == "No"):
-                         
-                         collection_alphabetized.append(
-                              [
-                                   self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
-                                   self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
-                                   self.checkBox(str(line).split("\",\"")[4]), # Cart
-                                   self.checkBox(str(line).split("\",\"")[5]), # Box
-                                   self.checkBox(str(line).split("\",\"")[6]), # Manual
-                                   str(line).split("\",\"")[8], # Price
-                                   str(line).split("\",\"")[3], # Notes
-                              ])
+                    console = self.fixStringOutputConsole(self.fixStringInput(str(line).split("\",\"")[2])).split("[")[0]
+                    
+                    if (str(line).split("\",\"")[5] == "No"):
+
+                         # Lets try to get a more exact result
+                         add_entry = False
+                         if (console == fixed_query):
+                              add_entry = True
+                         elif (self.fixStringInput(self.fixStringOutputConsole(str(line).split("\",\"")[2].split("[")[0])) == fixed_query):
+                              add_entry = True
+                         elif (console.replace("sega", "") == fixed_query): # try removing "sega"
+                              add_entry = True
+
+                         if (add_entry):
+                              self.debugLog("console: " + console)
+                              self.debugLog("query: " + fixed_query)
+                              collection_alphabetized.append(
+                                   [
+                                        self.fixStringOutputConsole(str(line).split("\",\"")[2]), # Console
+                                        self.fixStringOutput(str(line).split("\",\"")[1]), # Title\
+                                        self.checkBox(str(line).split("\",\"")[4]), # Cart
+                                        self.checkBox(str(line).split("\",\"")[5]), # Box
+                                        self.checkBox(str(line).split("\",\"")[6]), # Manual
+                                        str(line).split("\",\"")[8], # Price
+                                        str(line).split("\",\"")[3], # Notes
+                                   ])
           
           elif (show_missing_case == False):
                for line in collection:
