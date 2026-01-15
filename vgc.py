@@ -50,7 +50,7 @@ for num in range(total):
     print ("Usage:")
     print ("")
     print ("  search \"<query>\" - Search your collection with a query")
-    print ("  show_notes       - Show the notes field for each games shown")
+    print ("  notes       - Show the notes field for each games shown")
     print ("  refresh          - Refresh the local database manually")
     print ("  cases            - Show games with missing cases, your search query becomes console search")
     print ("  debug            - Enable Debug Logging")
